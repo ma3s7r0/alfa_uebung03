@@ -8,7 +8,12 @@ class Main extends Component {
 
     this.state = {
       formValues: {
-
+        anbieter : "-1",
+        volumen : "-1",
+        minuten: "-1",
+        handycheck : "none",
+        hersteller: "-1",
+        modell : "-1"
       },
       displayFormNr: 0
     }
@@ -117,12 +122,12 @@ class Main extends Component {
         ...this.state.formValues,
         [event.target.name]: event.target.value
       }
-    }, () => console.log(this.state.formValues[event.target.name]))
+    })
   }
 
   switchForms(direction) {
     let tempState = this.state.displayFormNr + direction
-    this.setState({ displayFormNr: tempState }, console.log(this.state.displayFormNr))
+    this.setState({ displayFormNr: tempState })
   }
 
   render() {
@@ -131,35 +136,30 @@ class Main extends Component {
         {(this.state.displayFormNr === 0) ? (
           <div>
             <h2>Persönliche Daten</h2>
-            <label>Vorname</label>
-            <input required type="text" name="vorname" onChange={this.handleInput} value={this.state.formValues.vorname} />
-            <label>Nachname</label>
-            <input required type="text" name="nachname" onChange={this.handleInput} value={this.state.formValues.nachname} />
-            <label>E-Mail</label>
-            <input required type="email" name="email" onChange={this.handleInput} value={this.state.formValues.email} />
-            <div>
-              <button type="button" onClick={() => this.switchForms(1)} disabled=
-              {
-                !(this.state.formValues.vorname && this.state.formValues.nachname && this.state.formValues.email)
-              }>
-              Weiter</button >
-            </div>
-          </div>) : ""}
+              <label>Vorname</label>
+              <input required type="text" name="vorname" onChange={this.handleInput} value={this.state.formValues.vorname} />
+              <label>Nachname</label>
+              <input required type="text" name="nachname" onChange={this.handleInput} value={this.state.formValues.nachname} />
+              <label>E-Mail</label>
+              <input required type="email" name="email" onChange={this.handleInput} value={this.state.formValues.email} />
+              <div>
+                <button type="button" onClick={() => this.switchForms(1)} disabled=
+                {
+                  !(this.state.formValues.vorname && this.state.formValues.nachname && this.state.formValues.email)
+                }>Weiter</button >
+              </div>
+            </div>) : ""}
         {(this.state.displayFormNr === 1) ? (
           <div>
             <h2>Anbieter</h2>
-            <select required name="anbieter" onChange={this.handleInput} value={this.state.formValues.anbieter}>
-              <option value="-1">Bitte Anbieter wählen</option>
-              {this.formData.anbieter.map((ele, index) => <option value={index}>{ele}</option>)}
-            </select>
-            <div>
-              <button type="button" onClick={() => this.switchForms(-1)}>Zurück</button>&nbsp;
-            <button type="button" onClick={() => this.switchForms(1)} disabled=
-            {
-              !this.state.formValues.anbieter
-            }>
-            Weiter</button>
-            </div>
+              <select required name="anbieter" onChange={this.handleInput} value={this.state.formValues.anbieter} >
+                <option value="-1">Bitte Anbieter wählen</option>
+                {this.formData.anbieter.map((ele, index) => <option value={index}>{ele}</option>)}
+              </select>
+              <div>
+                <button type="button" onClick={() => this.switchForms(-1)}>Zurück</button>&nbsp;
+              <button type="button" onClick={() => this.switchForms(1)} disabled={this.state.formValues.anbieter === "-1"}>Weiter</button>
+              </div>
           </div>) : ""}
         {(this.state.displayFormNr === 2) ? (
           <div>
@@ -170,7 +170,7 @@ class Main extends Component {
             </select>
             <div>
               <button type="button" onClick={() => this.switchForms(-1)}>Zurück</button>&nbsp;
-            <button type="button" onClick={() => this.switchForms(1)} disabled={!this.state.formValues.volumen}>Weiter</button>
+            <button type="button" onClick={() => this.switchForms(1)} disabled={this.state.formValues.volumen === "-1"}>Weiter</button>
             </div>
           </div>) : ""}
         {(this.state.displayFormNr === 3) ? (
@@ -182,7 +182,7 @@ class Main extends Component {
             </select>
             <div>
               <button type="button" onClick={() => this.switchForms(-1)}>Zurück</button>&nbsp;
-            <button type="button" onClick={() => this.switchForms(1)} disabled={!this.state.formValues.minuten}>Weiter</button>
+            <button type="button" onClick={() => this.switchForms(1)} disabled={this.state.formValues.minuten === "-1"}>Weiter</button>
             </div>
           </div>) : ""}
         {(this.state.displayFormNr === 4) ? (
@@ -210,7 +210,7 @@ class Main extends Component {
               </div> </>) : ""}
             <div>
               <button type="button" onClick={() => this.switchForms(-1)}>Zurück</button>&nbsp;
-            <button type="button" onClick={() => this.switchForms(1)} disabled={!(this.state.formValues.handycheck === "n" || (this.state.formValues.modell && this.state.formValues.hersteller))}>Weiter</button>
+            <button type="button" onClick={() => this.switchForms(1)} disabled={!(this.state.formValues.handycheck === "n" || !(this.state.formValues.hersteller === "-1" || this.state.formValues.modell === "-1") || this.state.formValues.handychec === "none")}>Weiter</button>
             </div>
           </div>) : ""}
         {(this.state.displayFormNr === 5) ? (
@@ -231,7 +231,7 @@ class Main extends Component {
               <p>Modell: {this.formData.handys.modelle[this.state.formValues.modell].name+", "+this.formData.handys.modelle[this.state.formValues.modell].preis+" €"}</p>
             </div>) : ""}
             <button type="button" onClick={() => this.switchForms(-1)}>Zurück</button>&nbsp;
-            <button type="button">Bestellen</button>
+            <button type="button" onClick={() => this.switchForms(1)}>Bestellen</button>
           </div>) : ""}
         {(this.state.displayFormNr === 6) ? (
           <div>
